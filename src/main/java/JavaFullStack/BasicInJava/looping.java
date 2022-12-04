@@ -19,13 +19,13 @@ public class looping {
 			System.out.println("WELCOME JAVA");
 			pos++;
 		}
-		int pos1=1;
+		int i=0;
 		do
 		{
 			System.out.println("WELCOME THE JAVA FULLSTRACK");
-		    pos1++;
+		    i++;
 		}
-		while(pos1<=5);
+		while(i<=2);
 	}
 
 }

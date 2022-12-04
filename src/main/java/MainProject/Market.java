@@ -10,6 +10,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 
-import JavaFullStack.BasicInJava.Collection.Treeset;
+//import JavaFullStack.BasicInJava.Collection.Treeset;
 
 public class Market<T> implements Runnable, SuperMarketAction  
 {
@@ -29,6 +30,12 @@ public class Market<T> implements Runnable, SuperMarketAction
 	//ArrayList<SuperMarketDetails> Spices=new ArrayList<SuperMarketDetails>();
 	ArrayList<SuperMarketDetails> Spices=null;
 	Scanner scan=new Scanner(System.in);
+	public void read() throws IOException, ClassNotFoundException
+	{
+		fis=new FileInputStream(file);
+		ois=new ObjectInputStream(fis);
+		Spices=(ArrayList<SuperMarketDetails>)ois.readObject();
+	}
 	public void write() throws IOException
 	{
 		fos=new FileOutputStream(file);
@@ -37,13 +44,6 @@ public class Market<T> implements Runnable, SuperMarketAction
 		oos.close();
 		fos.close();
 	}
-	public void read() throws IOException, ClassNotFoundException
-	{
-		fis=new FileInputStream(file);
-		ois=new ObjectInputStream(fis);
-		Spices=(ArrayList<SuperMarketDetails>)ois.readObject();
-	}
-	
 	public Market()
 	{
 	}
@@ -68,7 +68,7 @@ public class Market<T> implements Runnable, SuperMarketAction
 	}
 	
 	@Override
-	public void Listalldetails() {
+	public void Stockdetails() {
 		// TODO Auto-generated method stub
 		try {
 			read();
@@ -85,10 +85,110 @@ public class Market<T> implements Runnable, SuperMarketAction
 			System.out.println(it.next());
 		}
 	}
+	@Override
+	public void Visiting(String ProductName)
+	{
+		// TODO Auto-generated method stub
+	try
+	{
+		try 
+		{
+			read();
+		} catch (ClassNotFoundException | IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("please welcome to our SuperMarket list  your Product deatils"+ProductName);
+		ArrayList<SuperMarketDetails> vist=new ArrayList<SuperMarketDetails>();
+		vist.addAll(Spices);
+		for(int i=0;i<vist.size();i++)
+		{
+			if(vist.get(i).getProductName().equalsIgnoreCase(ProductName))
+				
+			System.out.println(vist.get(i));
+			
+		}
+		throw new SuperMarketException();
+	}
+	
+	catch(SuperMarketException exe)
+	{
+		System.out.println(exe+ " Please Enter Name only ");
+		for(SuperMarketDetails sp:Spices)
+		{
+			System.out.println(sp.getProductName());
+		}
+		System.out.println("please welcome to our SuperMarket list  your Product deatils"+ProductName);
+		String vst=scan.next();
+		Visiting(vst);
+		try {
+			write();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+  }
+
+	public void Buying(String ProductName) 
+	{
+		// TODO Auto-generated method stub
+		try
+		{
+		try {
+			read();
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<SuperMarketDetails> by=new Vector<SuperMarketDetails>();
+		by.addAll(Spices);
+		for(int i=0;i<by.size();i++)
+		{
+			if(by.get(i).getProductName().equalsIgnoreCase(ProductName))
+			{
+				Spices.remove(by.get(i));
+				System.out.println(ProductName+"Your Product Buying Succesfully");
+				try {
+					write();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return ;
+			}		
+		}
+		throw new SuperMarketException();
+	}
+		catch(SuperMarketException exe)
+		{
+			System.out.println(exe+"Not Matching Value");
+			for(SuperMarketDetails sp:Spices)
+			{
+				System.out.println(sp.getProductName());
+			}
+			System.out.println("Enter Product Name");
+			String prd=scan.next();
+			Buying(prd);
+			try {
+				write();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		System.out.println(ProductName+"Your Product Buying Succesfully");
+		
+	}
 
 	@Override
 	public void Update(String BrandName) {
 		// TODO Auto-generated method stub
+		try
+		{
 		try {
 			read();
 		} catch (ClassNotFoundException | IOException e) {
@@ -148,34 +248,21 @@ public class Market<T> implements Runnable, SuperMarketAction
 			}
 			return;
 		}
-	}
-	@Override
-	public void Delete(String ProductName) 
-	{
-		// TODO Auto-generated method stub
-		try {
-			read();
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		throw new SuperMarketException();
 		}
-		List<SuperMarketDetails> dlt=new Vector<SuperMarketDetails>();
-		dlt.addAll(Spices);
-		for(int i=0;i<dlt.size();i++)
+		catch(SuperMarketException exe)
 		{
-			if(dlt.get(i).getProductName().equalsIgnoreCase(ProductName))
+			System.out.println(exe+"Your value is Not Matching");
+			for(SuperMarketDetails sp:Spices)
 			{
-				Spices.remove(dlt.get(i));
-				System.out.println(ProductName+"has deleted Succesfully");
-				try {
-					write();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return ;
-			}		
+				System.out.println(sp.getBrandName());
+				System.out.println("Enter Correct Name");
+				String up=scan.next();
+				Update(up);
+			}
 		}
+		
+		
 	}
 	@Override
 	public void Sort() {
@@ -195,53 +282,48 @@ public class Market<T> implements Runnable, SuperMarketAction
 			e.printStackTrace();
 		}	
 	}
-	@Override
-	public void Search(String Price) {
-		// TODO Auto-generated method stub
-		
 	
-	}
 	@Override
 	synchronized public void run()
 	{
 		System.out.println("Welcome To Our SuperMarket " + Thread.currentThread().getName());
 		do
 		{
-		System.out.println("List in our product details please kindly choose to Your Choice\n 1.Addproductdetails \n 2.Listalldetails \n 3.Update \n 4.Search \n 5.Sort \n 6.Delete \n 7.Exit");
+		System.out.println("List in our product details please kindly choose to Your Choice\n 1.Addproductdetails \n 2.Stockdetails \n 3.Visiting \n 4.Buying \n 5.Update \n 6.Sort \n 7.Exit");
 		int menu=scan.nextInt();
 		switch(menu)
 		{
 		case 1 :
 			
 			System.out.println("Newly Added Product Details listed Below 1.BrandName 2.ProductName 3.Qunatity 4.LotNo 5.Price");
-			SuperMarketDetails spr=new SuperMarketDetails(scan.next(),scan.next(),scan.next(),scan.next(),scan.next());
+			SuperMarketDetails spr=new SuperMarketDetails(scan.next(), scan.next(), scan.next(), scan.next(), scan.next());
 			System.out.println(Addproductdetails(spr));
 			break;
 		case 2:
 			System.out.println("View Your Product Details");
-			Listalldetails();
+			Stockdetails();
 			break;
 		case 3:
+			Stockdetails();
+			System.out.println("view your product details");
+			String sch=scan.next();
+			Visiting(sch);
+			break;
+		case 4 :
+			Stockdetails();
+			System.out.println("Please Enter your ProducName");
+			String dlte=scan.next();
+			Buying(dlte);
+			break;
+		case 5:
 			System.out.println("which field you want Update");
 			String upd=scan.next();
 			Update(upd);
-			Listalldetails();
+			Stockdetails();
 			break ;
-		case 4:
-			System.out.println("which field you want search");
-			String sch=scan.next();
-			Search(sch);
-			break;
-		case 5:
+		case 6:
 			Sort();
-			break;
-		case 6 :
-			Listalldetails();
-			System.out.println("Please Enter your ProducName");
-			String dlte=scan.next();
-			Delete(dlte);
-			break;
-			
+			break;	
 		case 7:	
 		    default: System.out.println("Thanks For Your Coming");
 		}

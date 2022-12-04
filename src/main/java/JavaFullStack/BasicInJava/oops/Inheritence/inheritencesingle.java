@@ -1,0 +1,36 @@
+package JavaFullStack.BasicInJava.oops.Inheritence;
+
+public class inheritencesingle extends subclass2
+{
+	public void subclass()
+	{
+		int age = 28;
+		String name = "PRADEEP";
+		long mobno= 7904201927l;
+		char init='N';
+		double hight=5.6d;
+		
+		System.out.println(age);
+		System.out.println(name);
+		System.out.println(mobno);
+		System.out.println(init);
+		System.out.println(hight);	
+	}
+
+	public static void main(String[] args) {
+		// This type  2 classes conected is called single inheritence
+		
+		
+		inheritencesingle obj = new inheritencesingle();
+		obj.subclass();
+		obj.sub();
+		
+		
+		
+		
+		
+		
+
+	}
+
+}

@@ -9,7 +9,7 @@ public class bublesort1 {
 		{
 			for(int j=0;j<value1.length-i-1;j++)
 			{
-				if(value1[j]<value1[j+1])
+				if(value1[j+1]>value1[j])
 				{
 					int swap = value1[j];
 					value1[j]=value1[j+1];

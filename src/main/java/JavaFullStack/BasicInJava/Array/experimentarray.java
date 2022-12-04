@@ -19,7 +19,7 @@ public class experimentarray {
        a[8] = 9;
        a[9] = 10;
        
-       for(int pos=2;pos<a.length;pos+=2)
+       for(int pos=0;pos<a.length;pos++)
          {
       	   System.out.println(a[pos]);
          }
